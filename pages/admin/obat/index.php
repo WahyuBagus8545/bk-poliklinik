@@ -123,39 +123,66 @@ ob_start();
       </tbody>
     </table>
     <?php
-        if (isset($_POST['simpan'])) {
-        if (isset($_POST['id'])) {
+try {
+    // Periksa apakah tombol simpan ditekan
+    if (isset($_POST['simpan'])) {
+        // Log untuk debugging
+        echo "Form submission detected.";
+
+        // Jika ada id, lakukan update
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
             $stmt = $pdo->prepare("UPDATE obat SET 
                                     nama_obat = :nama_obat,
                                     kemasan = :kemasan,
                                     harga = :harga
-                                    WHERE
-                                    id = :id");
+                                    WHERE id = :id");
 
             $stmt->bindParam(':nama_obat', $_POST['nama_obat'], PDO::PARAM_STR);
             $stmt->bindParam(':kemasan', $_POST['kemasan'], PDO::PARAM_STR);
             $stmt->bindParam(':harga', $_POST['harga'], PDO::PARAM_INT);
             $stmt->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
-            $stmt->execute();
 
+            if ($stmt->execute()) {
+                echo "Data berhasil diperbarui.";
+            } else {
+                echo "Gagal memperbarui data.";
+            }
         } else {
-            $stmt = $pdo->prepare("INSERT INTO obat(nama_obat, kemasan, harga) 
+            // Jika tidak ada id, lakukan insert
+            $stmt = $pdo->prepare("INSERT INTO obat (nama_obat, kemasan, harga) 
                                     VALUES (:nama_obat, :kemasan, :harga)");
 
             $stmt->bindParam(':nama_obat', $_POST['nama_obat'], PDO::PARAM_STR);
             $stmt->bindParam(':kemasan', $_POST['kemasan'], PDO::PARAM_STR);
             $stmt->bindParam(':harga', $_POST['harga'], PDO::PARAM_INT);
 
-            $stmt->execute();
+            if ($stmt->execute()) {
+                echo "Data berhasil disimpan.";
+                // Redirect setelah berhasil menyimpan untuk menghindari double submission
+                header("Location:index.php");
+                exit();
+            } else {
+                echo "Gagal menyimpan data.";
+            }
         }
     }
-    if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus') {
-    $stmt = $pdo->prepare("DELETE FROM obat WHERE id = :id");
-    $stmt->bindParam(':id', $_GET['id']);
-    $stmt->execute();
-      
+
+    // Periksa apakah ada aksi hapus
+    if (isset($_GET['aksi']) && $_GET['aksi'] == 'hapus' && isset($_GET['id'])) {
+        $stmt = $pdo->prepare("DELETE FROM obat WHERE id = :id");
+        $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            echo "Data berhasil dihapus.";
+        } else {
+            echo "Gagal menghapus data.";
+        }
     }
-    ?>
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>
+
   </div>
 </div>
 <?php

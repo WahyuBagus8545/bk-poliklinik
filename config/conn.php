@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/url.php';
 $host = 'localhost';
-$dbname = 'poliklinik_bk';
+$dbname = 'bk_poliklinik';
 $username = 'root';
 $password = '';
 

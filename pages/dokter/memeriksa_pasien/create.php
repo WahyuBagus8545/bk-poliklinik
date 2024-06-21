@@ -81,6 +81,8 @@ ob_start();
                 <input type="text" class="form-control" id="catatan" name="catatan">
             </div>
 
+            <!-- obat -->
+
             <div class="form-group">
                 <label for="nama_pasien">Obat</label>
                 <select class="form-control" name="obat[]" multiple id="id_obat">
@@ -151,7 +153,7 @@ ob_start();
         ?>
     </div>
 </div>
-<script>
+<!-- <script>
     $(document).ready(function() {
         $('#id_obat').select2();
         $('#id_obat').on('change.select2', function (e) {
@@ -171,7 +173,7 @@ ob_start();
             $('#harga').val(sum); 
         });
     });
-</script>
+</script> -->
 <?php
 $content = ob_get_clean();
 ob_flush();
