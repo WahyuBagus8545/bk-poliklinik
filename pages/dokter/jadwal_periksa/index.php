@@ -113,14 +113,17 @@ ob_start();
               <td><?= $d['hari'] ?></td>
               <td><?= $d['jam_mulai'] ?></td>
               <td><?= $d['jam_selesai'] ?></td>
+              <!-- aksi diubah menjadi button -->
               <td>
                 <button class="btn btn-status btn-sm" data-id="<?= $d['id'] ?>" data-status="<?= $d['aktif'] ?>">
                   <?= $d['aktif'] == 'Y' ? 'Aktif' : 'Tidak Aktif' ?>
                 </button>
               </td>
+              
               <td>
                 <a href="edit.php/<?= $d['id'] ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
               </td>
+
             </tr>
         <?php
           }
